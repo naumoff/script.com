@@ -4,16 +4,17 @@ $file = $url.'/robots.txt';
 
 $handle = fopen($file,'r');
 if(!$handle){
-	echo 'failed to open stream!'."\n";
+	$mess1 =  'файл robots.txt - отсутствует!';
+	$warn1 = 'Программист: Создать файл robots.txt и разместить его на сайте';
 }else{
 	$fileSize = remote_filesize($file);
 	setcookie('fileSize',$fileSize);
-	echo "<pre>";
-	echo "robots.txt for {$url} successfully opened!"."\n";
-	echo "<a href='robots_read.php' target='_blank'>Read File</a>"."\n";
+	$mess1 = "файл robots.txt на {$url} присутствует"."\n";
+	$warn1 = "Доработки не требуются";
+	echo "<pre><a href='robots_read.php' target='_blank'>Read File</a>"."\n";
 }
 
-echo "<a href='/index.php'>Back!</a>";
+echo "<a href='/index.php'>Back!</a>"."\n";
 	
 
 function remote_filesize($url) {
@@ -31,5 +32,22 @@ function remote_filesize($url) {
 }
 
 ?>
+
+<table border="1">
+	<caption style="text-align:left;">Резюме</caption>
+	<thead>
+		<tr>
+			<th>Статус</th>
+			<th>Необходимые действия</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><?php echo $mess1 ?></td>
+			<td><?php echo $warn1 ?></td>
+		</tr>
+	</tbody>
+</table>
+
 </pre>
 	
