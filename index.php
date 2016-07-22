@@ -4,11 +4,14 @@ $errUrl = '';
 
 if ($_SERVER['REQUEST_METHOD']=='POST')
 {
-	if (empty($_POST['url']))
+	if (empty($_POST['url']) || empty($_POST['send']))
 	{
 		$errUlr = "* Please input URL";
 	}else{
 		$url = validate($_POST['url']);
+		setcookie('url',$url);
+		header('Location: ./results/robots.php');
+		exit;
 	}
 }
 
@@ -19,7 +22,6 @@ function validate($data){
 	return $data;
 }
 ?>
-
 
 <h3>checking lists</h3>
 <form method="POST"
@@ -33,31 +35,3 @@ function validate($data){
 	</fieldset>
 </form>
 
-<pre>
-
-<?php
-
-$file = $url.'/robots.txt';
-echo $file."\n";
-
-$handle = fopen($file,'r');
-if (!$handle) {
-	echo "File robots.txt is missing.\n";
-	exit;
-}else{
-	echo 'Robots.txt successfully opened';
-}
-
-
-//if(!$handle) {
-//	echo "unable to open robots.txt";
-//}else{
-//	echo "SUCCESS";
-//	$content = fread($handle,filesize($url));
-//	print_r($content);
-//	fclose($handle);
-//}
-
-
-?>
-</pre>
