@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="770a375b-2188-4753-98e5-859ce25db8f8" name="OpenServer" url="http://script.com">
+        <fileTransfer port="0" mountedRoot="C:\WEBDEV\OpenServer\domains\localhost\LearnBox\script.com" accessType="MOUNT" />
+      </webServer>
+    </option>
+  </component>
+</project>
