@@ -5,7 +5,7 @@ $file = $url.'/robots.txt';
 $handle = fopen($file,'r');
 
 $fileSize = $_COOKIE['fileSize'];
-$content = fread($handle,$fileSize);
+$content = $_COOKIE['content'];
 print_r($content);
 
 fclose($handle);
