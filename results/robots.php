@@ -9,15 +9,28 @@ if(!$handle){
 }else{
 	$fileSize = remote_filesize($file);
 	$content = fread($handle,$fileSize);
-	setcookie('fileSize',$fileSize);
 	setcookie('content',$content);
 	$mess1 = 'файл robots.txt присутствует.';
 	$warn1 = 'Доработки не требуются.';
-	echo "<pre><a href='robots_read.php' 
-                 target='_blank'>просмотр ROBOTS.TXT</a>"."\n";
+	$linkRobotsRead = "<a href='robots_read.php' target='_blank'>просмотр ROBOTS.TXT</a>";
 }
 
-echo "<a href='/index.php'>Вернуться к форме</a>"."\n";
+function remote_filesize($url) {
+	static $regex = '/^Content-Length: *+\K\d++$/im';
+	if (!$fp = @fopen($url, 'rb')) {
+		return false;
+	}
+	if (
+		 isset($http_response_header) &&
+		 preg_match($regex, implode("\n", $http_response_header), $matches)
+	) {
+		return (int)$matches[0];
+	}
+	return strlen(stream_get_contents($fp));
+}
+echo "<pre><br>";
+echo "<a href='/index.php'>Вернуться к форме</a>"."\n"."\n";
+echo $linkRobotsRead;
 
 $patternHost = "/^[^#]*host( )?:( )?/i";
 if (preg_match_all($patternHost,$content,$matches,PREG_SET_ORDER)){
@@ -35,7 +48,7 @@ if (preg_match_all($patternHost,$content,$matches,PREG_SET_ORDER)){
 $hostCount = count($matches);
 if($hostCount != 1){
 	$mess3="В файле прописано {$hostCount} директив Host!";
-	$warn3='Программист: Директива Host должна быть указана в файле толоко 1 раз. Необходимо удалить все дополнительные директивы Host и оставить только 1, 
+	$warn3='Программист: Директива Host должна быть указана в файле только 1 раз. Необходимо удалить все дополнительные директивы Host и оставить только 1, 
 	 корректную и соответствующую основному зеркалу сайта!';
 }else{
 	$mess3='В файле прописана 1 директива Host.';
@@ -61,18 +74,14 @@ if (preg_match_all($patternSitemap,$content,$matches,PREG_SET_ORDER)){
 	$warn5='Программист: Добавить в файл robots.txt директиву Sitemap';
 }
 
-function remote_filesize($url) {
-	static $regex = '/^Content-Length: *+\K\d++$/im';
-	if (!$fp = @fopen($url, 'rb')) {
-		return false;
-	}
-	if (
-		 isset($http_response_header) &&
-		 preg_match($regex, implode("\n", $http_response_header), $matches)
-	) {
-		return (int)$matches[0];
-	}
-	return strlen(stream_get_contents($fp));
+$headResponse = get_headers($file,1)[0];
+
+if(strpos($headResponse,'200 OK')){
+	$mess6='Файл robots.txt отдаёт код ответа сервера 200.';
+	$warn6='Доработки не требуются.';
+}else{
+	$mess6="При обращении к файлу robots.txt сервер возвращает код ответа {$headResponse}!";
+	$warn6='Программист: Файл robots.txt должны отдавать код ответа 200, иначе файл не будет обрабатываться. Необходимо настроить сайт таким образом, чтобы при обращении к файлу sitemap.xml сервер возвращает код ответа 200!';
 }
 
 ?>
@@ -105,6 +114,10 @@ function remote_filesize($url) {
 		<tr>
 			<td><?php echo $mess5 ?></td>
 			<td><?php echo $warn5 ?></td>
+		</tr>
+		<tr>
+			<td><?php echo $mess6 ?></td>
+			<td><?php echo $warn6 ?></td>
 		</tr>
 	</tbody>
 </table>

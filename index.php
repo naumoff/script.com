@@ -23,15 +23,15 @@ function validate($data){
 }
 ?>
 
-<h3>checking lists</h3>
+<h3>Проверка</h3>
 <form method="POST"
       action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>">
 	<fieldset>
-		<legend>check robots.txt file</legend>
-		Please input WEB address<br>
+		<legend>проверка файла robots.txt</legend>
+		Пожалуйста укажите полный WEB адрес<br>
 		<input type="url" name = "url" placeholder="http://google.com" required>
-		
-		<input type='submit' name = 'send' value='run' required>
+		<input type='submit' name = 'send' value='проверить' required>
 	</fieldset>
 </form>
 
+<b><?php echo $errUlr; ?></b>
