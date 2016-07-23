@@ -23,6 +23,13 @@ function validate($data){
 }
 ?>
 
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<title>robots.txt check</title>
+	<meta charset="UTF-8">
+</head>
+<body>
 <h3>Проверка</h3>
 <form method="POST"
       action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>">
@@ -35,3 +42,8 @@ function validate($data){
 </form>
 
 <b><?php echo $errUlr; ?></b>
+</body>
+</html>
+
+
+

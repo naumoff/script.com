@@ -12,7 +12,7 @@ if(!$handle){
 	setcookie('content',$content);
 	$mess1 = 'файл robots.txt присутствует.';
 	$warn1 = 'Доработки не требуются.';
-	$linkRobotsRead = "<a href='robots_read.php' target='_blank'>просмотр ROBOTS.TXT</a>";
+	$linkRobotsRead = "<a href='/results/robots_read.php' target='_blank'>просмотр ROBOTS.TXT</a>";
 }
 
 function remote_filesize($url) {
@@ -28,9 +28,6 @@ function remote_filesize($url) {
 	}
 	return strlen(stream_get_contents($fp));
 }
-echo "<pre><br>";
-echo "<a href='/index.php'>Вернуться к форме</a>"."\n"."\n";
-echo $linkRobotsRead;
 
 $patternHost = "/^[^#]*host( )?:( )?/i";
 if (preg_match_all($patternHost,$content,$matches,PREG_SET_ORDER)){
@@ -38,18 +35,13 @@ if (preg_match_all($patternHost,$content,$matches,PREG_SET_ORDER)){
 	$warn2 = 'Доработки не требуются.';
 }else{
 	$mess2 = 'В файле robots.txt не указана директива Host!';
-	$warn2 = 'Программист: Для того, чтобы поисковые системы знали, какая версия 
-	сайта является основных зеркалом, необходимо прописать адрес основного зеркала 
-	в директиве Host. В данный момент это не прописано. Необходимо добавить в файл
-	robots.txt директиву Host. Директива Host задётся в файле 1 раз, после всех 
-	правил!';
+	$warn2 = 'Программист: Для того, чтобы поисковые системы знали, какая версия сайта является основных зеркалом, необходимо прописать адрес основного зеркала в директиве Host. В данный момент это не прописано. Необходимо добавить в файл robots.txt директиву Host. Директива Host задётся в файле 1 раз, после всех правил!';
 }
 
 $hostCount = count($matches);
 if($hostCount != 1){
 	$mess3="В файле прописано {$hostCount} директив Host!";
-	$warn3='Программист: Директива Host должна быть указана в файле только 1 раз. Необходимо удалить все дополнительные директивы Host и оставить только 1, 
-	 корректную и соответствующую основному зеркалу сайта!';
+	$warn3='Программист: Директива Host должна быть указана в файле только 1 раз. Необходимо удалить все дополнительные директивы Host и оставить только 1, корректную и соответствующую основному зеркалу сайта!';
 }else{
 	$mess3='В файле прописана 1 директива Host.';
 	$warn3='Доработки не требуются.';
@@ -74,17 +66,47 @@ if (preg_match_all($patternSitemap,$content,$matches,PREG_SET_ORDER)){
 	$warn5='Программист: Добавить в файл robots.txt директиву Sitemap';
 }
 
-$headResponse = get_headers($file,1)[0];
+$headResponse = get_headers($file,1);
 
-if(strpos($headResponse,'200 OK')){
+if(strpos($headResponse[0],'200 OK')){
 	$mess6='Файл robots.txt отдаёт код ответа сервера 200.';
 	$warn6='Доработки не требуются.';
 }else{
-	$mess6="При обращении к файлу robots.txt сервер возвращает код ответа {$headResponse}!";
+	$mess6="При обращении к файлу robots.txt сервер возвращает код ответа {$headResponse[0]}!";
 	$warn6='Программист: Файл robots.txt должны отдавать код ответа 200, иначе файл не будет обрабатываться. Необходимо настроить сайт таким образом, чтобы при обращении к файлу sitemap.xml сервер возвращает код ответа 200!';
 }
 
 ?>
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<title>robots.txt analysis</title>
+	<meta charset="UTF-8">
+	<meta name="vieport" content="width=device-width, initial-scale=1">
+	<style>
+		table, th, td {
+			border: 2px solid black;
+		}
+		table {
+			border-collapse: collapse;
+			table-layout: fixed;
+			width: 100%;
+		}
+		th, td {
+			padding: 3px;
+			width: 50%;
+			word-wrap: break-word;
+			white-space: pre-wrap;
+		}
+	</style>
+</head>
+<body>
+
+<pre>
+<?php echo "<a href='/index.php'>Вернуться к форме</a>"."\n"."\n"; ?>
+<?php echo $linkRobotsRead; ?>
+
 <?php echo "<h2>{$url}</h2>"; ?>
 <table border="1">
 	<caption style="text-align:left;">Резюме</caption>
@@ -123,4 +145,5 @@ if(strpos($headResponse,'200 OK')){
 </table>
 
 </pre>
-	
+</body>
+</html>
