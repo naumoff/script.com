@@ -12,7 +12,7 @@ if(!$handle){
 	setcookie('content',$content);
 	$mess1 = 'файл robots.txt присутствует.';
 	$warn1 = 'Доработки не требуются.';
-	$linkRobotsRead = "<a href='/results/robots_read.php' target='_blank'>просмотр ROBOTS.TXT</a>";
+	$linkRobotsRead = "<a href='robots_read.php' target='_blank'>просмотр ROBOTS.TXT</a>";
 }
 
 function remote_filesize($url) {
